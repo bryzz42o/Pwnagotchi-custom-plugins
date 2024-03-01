@@ -2,6 +2,8 @@
 
 #Add to config.toml
 
+https://github.com/bryzz42o/Pwnagotchi-custom-plugins/archive/master.zip #this goes in the link section of the custom plugins
+
 #main.plugins.wifi_honeypot.enabled = true
 
 #main.plugins.wifi_honeypot.ssid = "FreeWiFi"  # Customize the SSID as desired
