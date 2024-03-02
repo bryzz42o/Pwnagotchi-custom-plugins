@@ -1,6 +1,6 @@
 # Installation Guide for Plugins via Custom Repository Link with Web UI
 
-This guide explains how to install four plugins for the Pwnagotchi device: **AGE**, **EXP**, **SIGSTR**, and **gameifyXP**. We will use a custom repository link with a web UI and configure the `config.toml` file to enable the plugins.
+This guide explains how to install these plugins for the Pwnagotchi device: **AGE**, **EXP**, **SIGSTR**, and **gameifyXP**.
 
 ## Prerequisites
 
@@ -34,3 +34,5 @@ main.plugins.EXP.enabled = true
 main.plugins.SIGSTR.enabled = true
 
 main.plugins.gameifyXP.enabled = true
+
+NOW REBOOT and Enable with WebUI 
