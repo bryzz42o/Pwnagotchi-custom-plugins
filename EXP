@@ -191,7 +191,7 @@ class EXP(plugins.Plugin):
                                            position=(int(self.options["exp_x_coord"]),
                                                      int(self.options["exp_y_coord"])),
                                             label_font=fonts.Bold, text_font=fonts.Medium))
-        ui.add_element('Pwr', LabeledValue(color=BLACK, label='NetXP', value=0,
+        ui.add_element('TrnXP', LabeledValue(color=BLACK, label='TrnXP', value=0,
                                             position=(int(self.options["str_x_coord"]),
                                                       int(self.options["str_y_coord"])),
                                             label_font=fonts.Bold, text_font=fonts.Medium))
@@ -204,7 +204,7 @@ class EXP(plugins.Plugin):
         ui.set('lvl', "%d" % self.lv)
         ui.set('XP', "%s" % bar)
         self.calcStrength()
-        ui.set('Pwr', "%d" % self.strength)
+        ui.set('TrnXP', "%d" % self.strength)
 
     def calcExpNeeded(self, level):
         # If the pwnagotchi is lvl <1 it causes the keys to be deleted
