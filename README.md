@@ -2,14 +2,11 @@
 
 #Add to config.toml
 
-https://github.com/bryzz42o/Pwnagotchi-custom-plugins/archive/master.zip #this goes in the link section of the custom plugins
+#this goes in the link section of the custom plugins: "https://github.com/bryzz42o/Pwnagotchi-custom-plugins/archive/master.zip",
+sudo pwnagotchi plugins update
+sudo pwnagotchi plugins install sigstr
+sudo pwnagotchi plugins upgrade
 
-#main.plugins.wifi_honeypot.enabled = true
+#you should now see the plugin in your WebUI
 
-#main.plugins.wifi_honeypot.ssid = "FreeWiFi"  # Customize the SSID as desired
-
-#main.plugins.wifi_honeypot.password_protected = false  # Set to true if you want the honeypot to be password protected
-
-#main.plugins.wifi_honeypot.beacon_interval = 0.1  # Adjust the beacon interval (in seconds) as needed
-
-#main.plugins.wifi_honeypot.max_clients = 10  # Maximum number of clients to support on the honeypot
+UPDATED!2ndMarch2024- Made the signal strength a bar similar to exp
