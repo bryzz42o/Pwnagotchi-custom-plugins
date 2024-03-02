@@ -191,7 +191,7 @@ class EXP(plugins.Plugin):
                                            position=(int(self.options["exp_x_coord"]),
                                                      int(self.options["exp_y_coord"])),
                                             label_font=fonts.Bold, text_font=fonts.Medium))
-        ui.add_element('Pwr', LabeledValue(color=BLACK, label='Pwr', value=0,
+        ui.add_element('Pwr', LabeledValue(color=BLACK, label='NetXP', value=0,
                                             position=(int(self.options["str_x_coord"]),
                                                       int(self.options["str_y_coord"])),
                                             label_font=fonts.Bold, text_font=fonts.Medium))
