@@ -1,5 +1,6 @@
 # Pwnagotchi-custom-plugins
 #1. sigstr: a plugin to display wifi signal strength as a bar on UI
+#2.gameifyXP: a plugin that gives you XP when you capture a handshakes [works with the AGE & EXP plugins to help train AI & make the GUI a bit more fun!]
 
 #Add to config.toml
 
