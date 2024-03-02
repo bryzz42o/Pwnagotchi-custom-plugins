@@ -1,45 +1,40 @@
 import logging
-import subprocess
+import os
+import json
 import pwnagotchi.plugins as plugins
-from pwnagotchi.ui.components import LabeledValue, Bar
-from pwnagotchi.ui.view import BLACK
 import pwnagotchi.ui.fonts as fonts
+from pwnagotchi.ui.components import LabeledValue
+from pwnagotchi.ui.view import BLACK
 
+# Static Variables
+TAG = "[SigStr Plugin]"
 
 class SigStr(plugins.Plugin):
     __author__ = 'bryzz42o'
-    __version__ = '1.0.1'
+    __version__ = '1.0.3'
     __license__ = 'GPL3'
     __description__ = 'Plugin to display signal strength as a bar.'
 
     def __init__(self):
-        super().__init__()
+        self.strength = 0
 
-    def get_signal_strength(self):
-        try:
-            # Run iwconfig command to get the signal strength
-            iwconfig_output = subprocess.check_output(['iwconfig', 'wlan0']).decode('utf-8')
-            # Find and extract the signal strength from the output
-            signal_strength_line = [line for line in iwconfig_output.split('\n') if 'Signal level' in line][0]
-            signal_strength = int(signal_strength_line.split('Signal level=')[-1].split(' ')[0])
-            return signal_strength
-        except Exception as e:
-            logging.error(f'Error retrieving signal strength: {e}')
-            return None
+    def on_loaded(self):
+        logging.info(TAG + " Plugin loaded")
 
     def on_ui_setup(self, ui):
-        with ui._lock:
-            # Add UI element to display signal strength as a bar
-            ui.add_element('signal_strength', Bar(color=BLACK, label='Signal', value=0, min_value=0, max_value=100, position=(ui.width() / 2 + 20, ui.height() - 25),
-                                                  label_font=fonts.Bold, text_font=fonts.Medium))
+        ui.add_element('SignalStrength', LabeledValue(color=BLACK, label='Signal', value='',
+                                                      position=(10, 10),
+                                                      label_font=fonts.Bold, text_font=fonts.Medium))
 
     def on_ui_update(self, ui):
-        with ui._lock:
-            # Update signal strength bar value on UI update
-            signal_strength = self.get_signal_strength()
-            if signal_strength is not None:
-                # Map the signal strength to a value between 0 and 100
-                signal_strength_percentage = max(0, min(100, signal_strength))
-                # Set the signal strength bar value
-                ui.set('signal_strength', signal_strength_percentage)
-                
+        # Assuming self.strength is updated elsewhere in the code
+        signal_bar = self.generate_signal_bar(self.strength)
+        ui.set('SignalStrength', signal_bar)
+
+    def generate_signal_bar(self, strength):
+        # Assuming strength is a value between 0 and 100 representing signal strength
+        bar_length = int(strength / 10)  # Divide strength by 10 to get bar length (assuming 10 units per bar segment)
+        bar_segments = '█' * bar_length  # Use '█' character to represent filled bar segments
+        empty_segments = '░' * (10 - bar_length)  # Use '░' character to represent empty bar segments
+        signal_bar = f'|{bar_segments}{empty_segments}|'  # Construct the full signal bar string
+        return signal_bar
