@@ -1,4 +1,5 @@
 # Pwnagotchi-custom-plugins
+#1. sigstr: a plugin to display wifi signal strength as a bar on UI
 
 #Add to config.toml
 
