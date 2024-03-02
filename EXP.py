@@ -166,4 +166,91 @@ class EXP(plugins.Plugin):
         legacyFile = os.path.dirname(os.path.realpath(__file__))
         legacyFile = legacyFile + "/" + FILE_SAVE_LEGACY +".txt"
         if os.path.exists(legacyFile):
-            self.loadFrom
+            self.loadFromTxtFile(legacyFile)
+            self.LogInfo("Migrating Legacy Save...")
+            self.Save(self.save_file, self.save_file_mode)
+            os.remove(legacyFile)
+
+    def barString(self, symbols_count, p):
+        if p > 100:
+            return BAR_ERROR
+        length = symbols_count - 2
+        bar_char = '▥'
+        blank_char = ' '
+        bar_length = int(round((length / 100) * p))
+        blank_length = length - bar_length
+        res = '|' + bar_char * bar_length + blank_char * blank_length + '|'
+        return res
+
+    def on_ui_setup(self, ui):
+        ui.add_element('lvl', LabeledValue(color=BLACK, label='lvl', value=0,
+                                            position=(0, 0),
+                                            label_font=fonts.Bold, text_font=fonts.Medium))
+        ui.add_element('XP', LabeledValue(color=BLACK, label='XP', value=0,
+                                           position=(0, 20),
+                                           label_font=fonts.Bold, text_font=fonts.Medium))
+        ui.add_element('Pwr', LabeledValue(color=BLACK, label='Pwr', value=0,
+                                            position=(0, 40),
+                                            label_font=fonts.Bold, text_font=fonts.Medium))
+
+    def on_ui_update(self, ui):
+        self.expneeded = self.calcExpNeeded(self.lv)
+        self.percent = int((self.exp / self.expneeded) * 100)
+        symbols_count = 10  # Define the number of symbols for the progress bar
+        bar = self.barString(symbols_count, self.percent)
+        ui.set('lvl', "Level: %d" % self.lv)
+        ui.set('XP', "XP: %d" % self.exp)
+        ui.set('Pwr', "Power: %d" % self.strength)
+
+    def calcExpNeeded(self, level):
+        # If the pwnagotchi is lvl <1 it causes the keys to be deleted
+        if level == 1:
+            return 5
+        return int((level ** 3) / 2)
+
+    def xp_check(self, agent):
+        self.LogDebug("XP CHECK")
+        if self.exp >= self.expneeded:
+            self.exp = 1
+            self.lv = self.lv + 1
+            self.expneeded = self.calcExpNeeded(self.lv)
+            self.displayLevelUp(agent)
+
+    def displayLevelUp(self, agent):
+        view = agent.view()
+        view.set('face', FACE_LEVELUP)
+        view.set('status', "Level Up!")
+        view.update(force=True)
+
+    # Event Handling
+    def on_association(self, agent, access_point):
+        self.exp += MULTIPLIER_ASSOCIATION
+        self.exp_tot += MULTIPLIER_ASSOCIATION
+        self.xp_check(agent)
+        self.Save(self.save_file, self.save_file_mode)
+
+    def on_deauthentication(self, agent, access_point, client_station):
+        self.exp += MULTIPLIER_DEAUTH
+        self.exp_tot += MULTIPLIER_DEAUTH
+        self.xp_check(agent)
+        self.Save(self.save_file, self.save_file_mode)
+
+    def on_handshake(self, agent, filename, access_point, client_station):
+        self.exp += MULTIPLIER_HANDSHAKE
+        self.exp_tot += MULTIPLIER_HANDSHAKE
+        self.xp_check(agent)
+        self.Save(self.save_file, self.save_file_mode)
+
+    def on_ai_best_reward(self, agent, reward):
+        self.exp += MULTIPLIER_AI_BEST_REWARD
+        self.exp_tot += MULTIPLIER_AI_BEST_REWARD
+        self.xp_check(agent)
+        self.Save(self.save_file, self.save_file_mode)
+
+    def on_ready(self, agent):
+        if self.calculateInitialXP:
+            self.LogInfo("Initial point calculation")
+            sum = self.calculateInitialSum(agent)
+            self.exp_tot = sum
+            self.calcLevelFromSum(sum, agent)
+            self.Save(self.save_file, self.save_file_mode)
