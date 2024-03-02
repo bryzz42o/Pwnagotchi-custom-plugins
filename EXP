@@ -53,7 +53,7 @@ class EXP(plugins.Plugin):
 
     def generate_exp_bar(self, percent):
         bar_length = int(percent / (100 / self.symbol_count))  # Adjusted to use self.symbol_count
-        filled_segments = '█' * bar_length
-        empty_segments = '░' * (self.symbol_count - bar_length)
+        filled_segments = '░' * bar_length
+        empty_segments = '█' * (self.symbol_count - bar_length)
         exp_bar = f'|{filled_segments}{empty_segments}|'
         return exp_bar
