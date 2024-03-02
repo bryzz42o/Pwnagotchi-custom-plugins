@@ -17,6 +17,7 @@ class SigStr(plugins.Plugin):
 
     def __init__(self):
         self.strength = 0
+        self.symbol_count = 10  # Define the symbol count for the signal strength bar
 
     def on_loaded(self):
         logging.info(TAG + " Plugin loaded")
@@ -33,8 +34,9 @@ class SigStr(plugins.Plugin):
 
     def generate_signal_bar(self, strength):
         # Assuming strength is a value between 0 and 100 representing signal strength
-        bar_length = int(strength / 10)  # Divide strength by 10 to get bar length (assuming 10 units per bar segment)
-        bar_segments = '█' * bar_length  # Use '█' character to represent filled bar segments
-        empty_segments = '░' * (10 - bar_length)  # Use '░' character to represent empty bar segments
+        bar_length = int(strength / (100 / self.symbol_count))  # Adjusted to use self.symbol_count
+        bar_segments = '░' * bar_length  # Use '░' character to represent filled bar segments
+        empty_segments = '█' * (self.symbol_count - bar_length)  # Use '█' character to represent empty bar segments
         signal_bar = f'|{bar_segments}{empty_segments}|'  # Construct the full signal bar string
         return signal_bar
+
