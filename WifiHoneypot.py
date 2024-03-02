@@ -4,8 +4,8 @@ from time import sleep
 from scapy.all import Dot11, Dot11Beacon, Dot11Elt, RadioTap
 
 class WiFiHoneypot(plugins.Plugin):
-    __author__ = 'Your Name'
-    __version__ = '1.0.0'
+    __author__ = 'bryzz42o'
+    __version__ = '1.0.3'
     __license__ = 'GPL3'
     __description__ = 'Creates a Wi-Fi honeypot.'
 
