@@ -23,7 +23,7 @@ class SigStr(plugins.Plugin):
 
     def on_ui_setup(self, ui):
         ui.add_element('SignalStrength', LabeledValue(color=BLACK, label='Signal', value='',
-                                                      position=(10, 10),
+                                                      position=(0, 205),
                                                       label_font=fonts.Bold, text_font=fonts.Medium))
 
     def on_ui_update(self, ui):
