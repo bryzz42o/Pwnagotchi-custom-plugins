@@ -13,7 +13,7 @@ TAG = "[SigStr Plugin]"
 
 class SigStr(plugins.Plugin):
     __author__ = 'bryzz42o'
-    __version__ = '1.0.5'
+    __version__ = '1.0.6'
     __license__ = 'GPL3'
     __description__ = 'Plugin to display signal strength as a bar.'
     REFRESH_INTERVAL = 2  # Refresh interval in seconds
@@ -37,9 +37,10 @@ class SigStr(plugins.Plugin):
 
     def on_ui_update(self, ui):
         signal_strength = self.get_wifi_signal_strength()
-        self.strength = signal_strength
-        signal_bar = self.generate_signal_bar(self.strength)
-        ui.set('SignalStrength', signal_bar)
+        if signal_strength is not None:
+            self.strength = signal_strength
+            signal_bar = self.generate_signal_bar(self.strength)
+            ui.set('SignalStrength', signal_bar)
 
     def refresh(self):
         self.timer = threading.Timer(self.REFRESH_INTERVAL, self.refresh)  # Reset the timer
@@ -54,9 +55,11 @@ class SigStr(plugins.Plugin):
         return signal_bar
 
     def get_wifi_signal_strength(self):
-        command_output = subprocess.check_output(["iw", "dev", "wlan0", "link"]).decode("utf-8")
-        signal_strength = int(command_output.split("signal: ")[1].split(" dBm")[0])
-        signal_strength_percent = max(0, min(100, (signal_strength + 100) / 50 * 100))
-        return signal_strength_percent
-
-
+        try:
+            command_output = subprocess.check_output(["iw", "dev", "wlan0", "link"], stderr=subprocess.DEVNULL).decode("utf-8")
+            signal_strength = int(command_output.split("signal: ")[1].split(" dBm")[0])
+            signal_strength_percent = max(0, min(100, (signal_strength + 100) / 50 * 100))
+            return signal_strength_percent
+        except subprocess.CalledProcessError:
+            logging.error(TAG + " Failed to retrieve signal strength")
+            return None
